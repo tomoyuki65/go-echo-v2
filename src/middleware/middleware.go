@@ -3,6 +3,7 @@ package middleware
 import (
 	"log/slog"
 	"net/http"
+	"strings"
 
 	utilContext "go-echo-v2/util/context"
 	"go-echo-v2/util/logger"
@@ -86,4 +87,23 @@ func CorsMiddleware() echo.MiddlewareFunc {
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodOptions},
 		AllowHeaders: []string{echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization, "X-Request-Source"},
 	})
+}
+
+// 認証用のミドルウェア
+func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Authorizationヘッダーからトークンを取得
+		idToken := ""
+		authHeader := c.Request().Header.Get("Authorization")
+		if authHeader != "" {
+			idToken = strings.Replace(authHeader, "Bearer ", "", 1)
+		} else {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
+
+		// TODO: 必要な認証処理を実装する
+		_ = idToken
+
+		return next(c)
+	}
 }

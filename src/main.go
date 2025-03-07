@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"os"
 
+	_ "go-echo-v2/docs"
 	"go-echo-v2/middleware"
 	"go-echo-v2/router"
-	_ "go-echo-v2/docs"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
