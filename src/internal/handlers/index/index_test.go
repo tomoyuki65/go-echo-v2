@@ -9,9 +9,7 @@ import (
 
 	mockRepoIndex "go-echo-v2/internal/repositories/index/mock_index"
 	"go-echo-v2/internal/services/index"
-	// "go-echo-v2/router"
 	"go-echo-v2/middleware"
-	// indexHandler "go-echo-v2/internal/handlers/index"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
