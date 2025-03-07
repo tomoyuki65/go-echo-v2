@@ -1,0 +1,26 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Go言語（Golang）のフレームワーク「Echo」によるAPI開発サンプルのバージョン２",
+        "title": "go-echo-v2 API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/": {
+            "get": {
+                "description": "テキスト「Hello World !!」を出力する。",
+                "tags": [
+                    "index"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: Go言語（Golang）のフレームワーク「Echo」によるAPI開発サンプルのバージョン２
+  title: go-echo-v2 API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: テキスト「Hello World !!」を出力する。
+      responses:
+        "200":
+          description: OK
+      tags:
+      - index
+swagger: "2.0"
