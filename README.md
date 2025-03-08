@@ -60,3 +60,29 @@ docker compose exec api go test -v ./internal/handlers/...
 docker compose exec api swag i
 ```  
   
+<br />
+  
+## マイグレーションに関する操作用コマンド
+ローカルサーバー起動中に以下のコマンドを実行可能です。  
+  
+### 1. マイグレーションの状態確認
+```
+docker compose exec api go run ./database/cmd/migrate/status/main.go
+
+docker compose exec -e ENV=testing api go run ./database/cmd/migrate/status/main.go
+```  
+> テスト用DBに対して実行したい場合はオプション「-e ENV=testing」を付ける  
+  
+### 2. マイグレーションの実行
+```
+docker compose exec api go run ./database/cmd/migrate/apply/main.go
+
+docker compose exec -e ENV=testing api go run ./database/cmd/migrate/apply/main.go
+```  
+  
+### 3. ロールバックの実行
+```
+docker compose exec api go run ./database/cmd/migrate/down/main.go
+
+docker compose exec -e ENV=testing api go run ./database/cmd/migrate/down/main.go
+```  
