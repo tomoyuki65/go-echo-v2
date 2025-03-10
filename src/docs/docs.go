@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/": {
+        "/api/v1/": {
             "get": {
                 "description": "テキスト「Hello World !!」を出力する。",
                 "tags": [
@@ -35,7 +35,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "go-echo-v2 API",
 	Description:      "Go言語（Golang）のフレームワーク「Echo」によるAPI開発サンプルのバージョン２",

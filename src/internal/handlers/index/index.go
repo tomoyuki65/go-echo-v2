@@ -10,7 +10,7 @@ import (
 // @Description テキスト「Hello World !!」を出力する。
 // @Tags index
 // @Success 200
-// @Router / [get]
+// @Router /api/v1/ [get]
 func Index(c echo.Context) error {
 	// インスタンス生成
 	indexRepository := repoIndex.NewIndexRepository()

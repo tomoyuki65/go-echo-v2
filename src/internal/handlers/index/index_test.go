@@ -2,6 +2,7 @@ package index
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -11,12 +12,18 @@ import (
 	"go-echo-v2/internal/services/index"
 	"go-echo-v2/middleware"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 )
 
 func TestIndex(t *testing.T) {
+	// .env ファイルの読み込み
+	if err := godotenv.Load("../../../.env"); err != nil {
+		slog.Error(".envファイルの読み込みに失敗しました。")
+	}
+
 	// テスト用のENV設定
 	env := os.Getenv("ENV")
 	os.Setenv("ENV", "testing")
@@ -47,6 +54,11 @@ func TestIndex(t *testing.T) {
 
 // 認証用ミドルウェアのテスト
 func TestAuthMiddleware(t *testing.T) {
+	// .env ファイルの読み込み
+	if err := godotenv.Load("../../../.env"); err != nil {
+		slog.Error(".envファイルの読み込みに失敗しました。")
+	}
+
 	// テスト用のENV設定
 	env := os.Getenv("ENV")
 	os.Setenv("ENV", "testing")
@@ -67,8 +79,7 @@ func TestAuthMiddleware(t *testing.T) {
 
 	// レスポンス結果のJSONを取得
 	var resbody map[string]interface{}
-	err := json.Unmarshal(rec.Body.Bytes(), &resbody)
-	if err != nil {
+	if err := json.Unmarshal(rec.Body.Bytes(), &resbody); err != nil {
 		t.Fatal(err)
 	}
 
