@@ -19,6 +19,10 @@ import (
 // @version 1.0
 // @description Go言語（Golang）のフレームワーク「Echo」によるAPI開発サンプルのバージョン２
 // @host localhost:8080
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and token.
 func main() {
 	// .env ファイルの読み込み
 	err := godotenv.Load()

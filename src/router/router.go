@@ -1,6 +1,7 @@
 package router
 
 import (
+	"go-echo-v2/internal/handlers/healthcheck"
 	"go-echo-v2/internal/handlers/index"
 	"go-echo-v2/middleware"
 
@@ -12,4 +13,5 @@ func SetupRouter(e *echo.Echo) {
 
 	v1 := e.Group("/api/v1")
 	v1.GET("/", index.Index, middleware.AuthMiddleware)
+	v1.GET("/healthcheck", healthcheck.Healthcheck, middleware.ApiKeyAuthMiddleware)
 }

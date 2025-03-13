@@ -1,8 +1,11 @@
 package middleware
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"log/slog"
 	"net/http"
+	"os"
 	"strings"
 
 	utilContext "go-echo-v2/util/context"
@@ -103,6 +106,31 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// TODO: 必要な認証処理を実装する
 		_ = idToken
+
+		return next(c)
+	}
+}
+
+// APIキー認証用のミドルウェア
+func ApiKeyAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Authorizationへっだーからトークンを取得
+		idToken := ""
+		authHeader := c.Request().Header.Get("Authorization")
+		if authHeader != "" {
+			idToken = strings.Replace(authHeader, "Bearer ", "", 1)
+		} else {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
+
+		// APIキー認証チェック
+		apiKey := os.Getenv("GO_ECHO_V2_API_KEY")
+		hash := sha256.Sum256([]byte(idToken))
+		hashString := hex.EncodeToString(hash[:])
+
+		if hashString != apiKey {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
 
 		return next(c)
 	}

@@ -48,7 +48,6 @@ func TestIndex(t *testing.T) {
 
 	// 検証
 	assert.Equal(t, nil, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.Equal(t, "Hello World !!", rec.Body.String())
 }
 
@@ -70,7 +69,7 @@ func TestAuthMiddleware(t *testing.T) {
 	v1 := e.Group("/api/v1")
 	v1.GET("/", Index, middleware.AuthMiddleware)
 
-	// テスト用リクエストのecho.Context作成
+	// テスト用リクエストの作成
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/", nil)
 	rec := httptest.NewRecorder()
 

@@ -1,3 +1,16 @@
+definitions:
+  go-echo-v2_internal_handlers_healthcheck.OKResponse:
+    properties:
+      message:
+        example: Health Check OK !!
+        type: string
+    type: object
+  healthcheck.InternalServerErrorResponse:
+    properties:
+      message:
+        example: 'Failed to health check: error message'
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -13,4 +26,26 @@ paths:
           description: OK
       tags:
       - index
+  /api/v1/healthcheck:
+    get:
+      description: APIとDBの接続確認をするためのヘルスチェックAPI
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-echo-v2_internal_handlers_healthcheck.OKResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/healthcheck.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - healthcheck
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

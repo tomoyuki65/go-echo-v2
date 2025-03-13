@@ -9,6 +9,8 @@ import (
 
 	"entgo.io/ent/dialect"
 	_ "github.com/lib/pq" // DB driver
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func CreateDsnForEnt() string {
@@ -113,4 +115,18 @@ func SetupDatabase(ctx context.Context) (*ent.Client, error) {
 	}
 
 	return client, nil
+}
+
+// GORMで接続したい場合
+func SetupDatabaseWithGorm(ctx context.Context) (*gorm.DB, error) {
+	// DBの接続情報の取得
+	dsn := CreateDsnForAtlas()
+
+	// DBクライアントの取得
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

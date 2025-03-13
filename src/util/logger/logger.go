@@ -38,17 +38,29 @@ var slogHandler = &SlogHandler{
 var logger = slog.New(slogHandler)
 
 func Info(ctx context.Context, message string) {
-	logger.InfoContext(ctx, message)
+	env := os.Getenv("ENV")
+	if env != "testing" {
+		logger.InfoContext(ctx, message)
+	}
 }
 
 func Warn(ctx context.Context, message string) {
-	logger.WarnContext(ctx, message)
+	env := os.Getenv("ENV")
+	if env != "testing" {
+		logger.WarnContext(ctx, message)
+	}
 }
 
 func Error(ctx context.Context, message string) {
-	logger.ErrorContext(ctx, message)
+	env := os.Getenv("ENV")
+	if env != "testing" {
+		logger.ErrorContext(ctx, message)
+	}
 }
 
 func LogAttrs(ctx context.Context, level slog.Level, msg string, attrs ...slog.Attr) {
-	logger.LogAttrs(ctx, level, msg, attrs...)
+	env := os.Getenv("ENV")
+	if env != "testing" {
+		logger.LogAttrs(ctx, level, msg, attrs...)
+	}
 }
