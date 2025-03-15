@@ -26,6 +26,12 @@ docker compose down
 ```  
   
 <br />
+
+## OpenAPI仕様書について
+ローカルサーバー起動後、ブラウザで以下のURLにアクセスするとOpenAPI仕様書を確認できます。またはVSCodeの拡張機能などでファイル「src/docs/swagger.yaml」を直接プレビューして下さい。  
+> http://localhost:8080/swagger/index.html
+  
+<br />
   
 ## コード修正後に使うコマンド
 ローカルサーバー起動中に以下のコマンドを実行可能です。  
@@ -99,4 +105,37 @@ docker compose exec api go run ./cmd/create-apikey/main.go
 ```
 GO_ECHO_V2_API_KEY=208c190373d51328cfda7b27993925bcc4c5edd0b50593f0a23cb730493f4711
 ```  
+  
+<br />
+  
+## 本番環境用のコンテナについて
+本番環境用コンテナをローカルでビルドして確認したい場合は、以下の手順で行って下さい。  
+  
+### 1. .env.productionの修正
+本番環境用の機密情報を含まない環境変数の設定には「.env.production」を使っていますが、ローカルで確認したい場合はローカル用と同様に機密情報も含む環境変数も追加して下さい。  
+```
+POSTGRES_HOST=host.docker.internal
+POSTGRES_PORT=5432
+POSTGRES_DB=pg-db
+POSTGRES_USER=pg-user
+POSTGRES_PASSWORD=pg-password
+GO_ECHO_V2_API_KEY=208c190373d51328cfda7b27993925bcc4c5edd0b50593f0a23cb730493f4711
+```  
+  
+### 2. コンテナのビルド
+以下のコマンドを実行し、コンテナをビルドします。  
+```
+docker build --no-cache -f ./docker/prod/Dockerfile -t go-echo-v2-api:latest .
+```  
+  
+### 3. コンテナの起動
+以下のコマンドを実行し、コンテナを起動します。  
+```
+docker run -d -p 80:8080 go-echo-v2-api:latest
+```  
+  
+<br />
+  
+## 参考記事  
+[・Go言語（Golang）のEchoでシンプルかつ実務的なバックエンドAPI開発方法まとめ](https://golang.tomoyuki65.com/how-to-develop-api-with-golans-echo-v2)  
   

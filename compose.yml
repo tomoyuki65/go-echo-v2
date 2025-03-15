@@ -23,6 +23,7 @@ services:
       - POSTGRES_USER=pg-user
       - POSTGRES_PASSWORD=pg-password
       - POSTGRES_INITDB_ARGS=--locale=ja_JP.utf8
+      - TZ=Asia/Tokyo
     ports:
       - "5432:5432"
     volumes:

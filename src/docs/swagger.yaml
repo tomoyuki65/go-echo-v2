@@ -5,10 +5,109 @@ definitions:
         example: Health Check OK !!
         type: string
     type: object
+  go-echo-v2_internal_handlers_user.CreateUserRequestBody:
+    properties:
+      email:
+        example: t.yamada@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      last_name:
+        example: 山田
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    type: object
+  go-echo-v2_internal_handlers_user.CreateUserResponse:
+    properties:
+      email:
+        example: t.yamada@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      last_name:
+        example: 山田
+        type: string
+      uid:
+        example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        type: string
+    type: object
+  go-echo-v2_internal_handlers_user.UpdateUserRequestBody:
+    properties:
+      email:
+        example: t.sato@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      last_name:
+        example: 佐藤
+        type: string
+    type: object
+  go-echo-v2_internal_handlers_user.UserResponse:
+    properties:
+      created_at:
+        example: "2025-03-15 18:08:00"
+        type: string
+      deleted_at:
+        example: ""
+        type: string
+      email:
+        example: t.yamada@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: 山田
+        type: string
+      uid:
+        type: string
+      updated_at:
+        example: "2025-03-15 18:08:00"
+        type: string
+    type: object
   healthcheck.InternalServerErrorResponse:
     properties:
       message:
         example: 'Failed to health check: error message'
+        type: string
+    type: object
+  user.BadRequestResponse:
+    properties:
+      message:
+        example: 'リクエストボディが不正です。: error message'
+        type: string
+    type: object
+  user.InternalServerErrorResponse:
+    properties:
+      message:
+        example: 'Internal Server Error: error message'
+        type: string
+    type: object
+  user.OKResponse:
+    properties:
+      message:
+        example: OK
+        type: string
+    type: object
+  user.UnauthorizedResponse:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+    type: object
+  user.UnprocessableEntityResponse:
+    properties:
+      message:
+        example: 'バリデーションエラー: error message'
         type: string
     type: object
 host: localhost:8080
@@ -42,6 +141,147 @@ paths:
       - Bearer: []
       tags:
       - healthcheck
+  /api/v1/user:
+    post:
+      description: ユーザー作成API
+      parameters:
+      - description: 作成するユーザー情報
+        in: body
+        name: CreateUserRequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/go-echo-v2_internal_handlers_user.CreateUserRequestBody'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/go-echo-v2_internal_handlers_user.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.BadRequestResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/user.UnprocessableEntityResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.InternalServerErrorResponse'
+      tags:
+      - user
+  /api/v1/user/:uid:
+    delete:
+      description: 対象ユーザー削除API
+      parameters:
+      - description: uid
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.OKResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.UnauthorizedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - user
+    get:
+      description: 有効な対象ユーザー取得API
+      parameters:
+      - description: uid
+        in: path
+        name: uid
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 対象データが存在しない場合は空のオブジェクト「{}」を返す。
+          schema:
+            $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.UnauthorizedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - user
+    put:
+      description: 対象ユーザー更新API
+      parameters:
+      - description: uid
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: 更新するユーザー情報
+        in: body
+        name: UpdateUserRequestBody
+        required: true
+        schema:
+          $ref: '#/definitions/go-echo-v2_internal_handlers_user.UpdateUserRequestBody'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.UnauthorizedResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/user.UnprocessableEntityResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - user
+  /api/v1/users:
+    get:
+      description: 全てのユーザー取得API <br/> ※削除済みユーザー含む
+      responses:
+        "200":
+          description: 対象データが存在しない場合は空の配列「[]」を返す。
+          schema:
+            items:
+              $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.UnauthorizedResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - user
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and token.

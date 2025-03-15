@@ -8,6 +8,7 @@ import (
 	_ "go-echo-v2/docs"
 	"go-echo-v2/middleware"
 	"go-echo-v2/router"
+	"go-echo-v2/util/validator"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -38,11 +39,17 @@ func main() {
 	e.Use(middleware.CorsMiddleware())
 	e.Use(echoMiddleware.Recover()) // panic発生時にサーバー停止を防ぐ
 
+	// バリデーション設定
+	e.Validator = validator.NewCustomValidator()
+
 	// ルーティング設定
 	router.SetupRouter(e)
 
 	// API仕様書の設定
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
+	env := os.Getenv("ENV")
+	if env != "production" {
+		e.GET("/swagger/*", echoSwagger.WrapHandler)
+	}
 
 	// ポート番号の設定
 	port := os.Getenv("PORT")
