@@ -20,7 +20,7 @@ import (
  */
 
 // 正常系
-func TestUpdateUserByUID(t *testing.T) {
+func TestUpdateUserByUIDOK(t *testing.T) {
 	// .env ファイルの読み込み
 	if err := godotenv.Load("../../../.env"); err != nil {
 		slog.Error(".envファイルの読み込みに失敗しました。")

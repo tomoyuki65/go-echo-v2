@@ -19,7 +19,7 @@ import (
  */
 
 // 正常系
-func TestDeleteUserByUID(t *testing.T) {
+func TestDeleteUserByUIDOK(t *testing.T) {
 	// .env ファイルの読み込み
 	if err := godotenv.Load("../../../.env"); err != nil {
 		slog.Error(".envファイルの読み込みに失敗しました。")
