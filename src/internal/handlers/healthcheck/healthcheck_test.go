@@ -12,6 +12,7 @@ import (
 	mockRepoHealthcheck "go-echo-v2/internal/repositories/healthcheck/mock_healthcheck"
 	"go-echo-v2/internal/services/healthcheck"
 	"go-echo-v2/middleware"
+	utilContext "go-echo-v2/util/context"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -156,7 +157,7 @@ func TestHealthCheckDBError(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/api/v1/healthcheck", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	// リポジトリのモック化
 	ctrl := gomock.NewController(t)

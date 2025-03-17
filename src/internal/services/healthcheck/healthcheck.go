@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"go-echo-v2/internal/repositories/healthcheck"
+	utilContext "go-echo-v2/util/context"
 	"go-echo-v2/util/logger"
 
 	"github.com/labstack/echo/v4"
@@ -36,7 +37,7 @@ func NewHealthcheckService(
 
 // Healthcheckメソッドの実装
 func (s *healthcheckService) Healthcheck(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	err := s.healthcheckRepository.Healthcheck(ctx)
 	if err != nil {

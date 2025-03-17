@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"go-echo-v2/internal/repositories/user"
+	utilContext "go-echo-v2/util/context"
 	"go-echo-v2/util/logger"
 
 	"github.com/google/uuid"
@@ -67,7 +68,7 @@ func NewUserService(
 
 // ユーザー作成
 func (s *userService) CreateUser(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	var r CreateUserRequestBody
 	if err := c.Bind(&r); err != nil {
@@ -106,7 +107,7 @@ func (s *userService) CreateUser(c echo.Context) error {
 
 // 有効な全てのユーザーを取得
 func (s *userService) GetAllUsers(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	users, err := s.userRepository.GetAllUsers(ctx)
 	if len(users) == 0 || err != nil {
@@ -143,7 +144,7 @@ func (s *userService) GetAllUsers(c echo.Context) error {
 
 // uidから対象のユーザーを取得
 func (s *userService) GetUserByUID(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
 	uid := c.Param("uid")
@@ -180,7 +181,7 @@ func (s *userService) GetUserByUID(c echo.Context) error {
 
 // uidから対象のユーザーを更新
 func (s *userService) UpdateUserByUID(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
 	uid := c.Param("uid")
@@ -243,7 +244,7 @@ func (s *userService) UpdateUserByUID(c echo.Context) error {
 
 // uidから対象ユーザーを論理削除
 func (s *userService) DeleteUserByUID(c echo.Context) error {
-	ctx := c.Request().Context()
+	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
 	uid := c.Param("uid")
