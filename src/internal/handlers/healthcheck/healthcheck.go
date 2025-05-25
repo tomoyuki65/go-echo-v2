@@ -2,7 +2,8 @@ package healthcheck
 
 import (
 	repoHealthcheck "go-echo-v2/internal/repositories/healthcheck"
-	"go-echo-v2/internal/services/healthcheck"
+	serviceHealthcheck "go-echo-v2/internal/services/healthcheck"
+	usecaseHealthcheck "go-echo-v2/internal/usecases/healthcheck"
 
 	"github.com/labstack/echo/v4"
 )
@@ -25,8 +26,9 @@ type InternalServerErrorResponse struct {
 func Healthcheck(c echo.Context) error {
 	// インスタンス生成
 	healthcheckRepository := repoHealthcheck.NewHealthcheckRepository()
-	healthcheckService := healthcheck.NewHealthcheckService(healthcheckRepository)
+	healthcheckService := serviceHealthcheck.NewHealthcheckService(healthcheckRepository)
+	healthcheckUsecase := usecaseHealthcheck.NewHealthcheckUsecase(healthcheckService)
 
-	// サービス実行
-	return healthcheckService.Healthcheck(c)
+	// ユースケースの実行
+	return healthcheckUsecase.Exec(c)
 }

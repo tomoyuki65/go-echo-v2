@@ -10,7 +10,8 @@ import (
 	"testing"
 
 	mockRepoHealthcheck "go-echo-v2/internal/repositories/healthcheck/mock_healthcheck"
-	"go-echo-v2/internal/services/healthcheck"
+	serviceHealthcheck "go-echo-v2/internal/services/healthcheck"
+	usecaseHealthcheck "go-echo-v2/internal/usecases/healthcheck"
 	"go-echo-v2/middleware"
 	utilContext "go-echo-v2/util/context"
 
@@ -164,10 +165,11 @@ func TestHealthCheckDBError(t *testing.T) {
 	defer ctrl.Finish()
 	mockHealthcheckRepository := mockRepoHealthcheck.NewMockHealthcheckRepository(ctrl)
 	mockHealthcheckRepository.EXPECT().Healthcheck(ctx).Return(echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("database check failed: err")))
-	healthcheckService := healthcheck.NewHealthcheckService(mockHealthcheckRepository)
+	healthcheckService := serviceHealthcheck.NewHealthcheckService(mockHealthcheckRepository)
+	healthcheckUsecase := usecaseHealthcheck.NewHealthcheckUsecase(healthcheckService)
 
 	// テスト実行
-	err := healthcheckService.Healthcheck(c)
+	err := healthcheckUsecase.Exec(c)
 
 	// 検証
 	assert.Error(t, err)

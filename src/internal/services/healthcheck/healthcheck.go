@@ -1,24 +1,14 @@
 package healthcheck
 
 import (
-	"fmt"
-	"net/http"
+	"context"
 
 	"go-echo-v2/internal/repositories/healthcheck"
-	utilContext "go-echo-v2/util/context"
-	"go-echo-v2/util/logger"
-
-	"github.com/labstack/echo/v4"
 )
-
-// レスポンス結果の型定義
-type OKResponse struct {
-	Message string `json:"message"`
-}
 
 // インターフェースの定義
 type HealthcheckService interface {
-	Healthcheck(c echo.Context) error
+	Healthcheck(ctx context.Context) error
 }
 
 // 構造体の定義
@@ -36,19 +26,11 @@ func NewHealthcheckService(
 }
 
 // Healthcheckメソッドの実装
-func (s *healthcheckService) Healthcheck(c echo.Context) error {
-	ctx := utilContext.CreateContext(c)
-
+func (s *healthcheckService) Healthcheck(ctx context.Context) error {
 	err := s.healthcheckRepository.Healthcheck(ctx)
 	if err != nil {
-		msg := fmt.Sprintf("Failed to health check: %v", err)
-		logger.Error(ctx, msg)
-		return echo.NewHTTPError(http.StatusInternalServerError, msg)
+		return err
 	}
 
-	res := OKResponse{
-		Message: "Health Check OK !!",
-	}
-
-	return c.JSON(http.StatusOK, res)
+	return nil
 }
