@@ -2,7 +2,8 @@ package user
 
 import (
 	repoUser "go-echo-v2/internal/repositories/user"
-	"go-echo-v2/internal/services/user"
+	serviceUser "go-echo-v2/internal/services/user"
+	usecaseUser "go-echo-v2/internal/usecases/user"
 
 	"github.com/labstack/echo/v4"
 )
@@ -69,10 +70,11 @@ type InternalServerErrorResponse struct {
 func CreateUser(c echo.Context) error {
 	// インスタンス生成
 	userRepository := repoUser.NewUserRepository()
-	userService := user.NewUserService(userRepository)
+	userService := serviceUser.NewUserService(userRepository)
+	userUsecase := usecaseUser.NewCreateUserUsecases(userService)
 
-	// サービス実行
-	return userService.CreateUser(c)
+	// ユースケースの実行
+	return userUsecase.Exec(c)
 }
 
 // @Description 全てのユーザー取得API <br/> ※削除済みユーザー含む
@@ -85,10 +87,11 @@ func CreateUser(c echo.Context) error {
 func GetAllUsers(c echo.Context) error {
 	// インスタンス生成
 	userRepository := repoUser.NewUserRepository()
-	userService := user.NewUserService(userRepository)
+	userService := serviceUser.NewUserService(userRepository)
+	userUsecase := usecaseUser.NewGetUsersUsecase(userService)
 
-	// サービス実行
-	return userService.GetAllUsers(c)
+	// ユースケースの実行
+	return userUsecase.Exec(c)
 }
 
 // @Description 有効な対象ユーザー取得API
@@ -102,10 +105,11 @@ func GetAllUsers(c echo.Context) error {
 func GetUserByUID(c echo.Context) error {
 	// インスタンス生成
 	userRepository := repoUser.NewUserRepository()
-	userService := user.NewUserService(userRepository)
+	userService := serviceUser.NewUserService(userRepository)
+	userUsecase := usecaseUser.NewGetUserUsecase(userService)
 
-	// サービス実行
-	return userService.GetUserByUID(c)
+	// ユースケースの実行
+	return userUsecase.Exec(c)
 }
 
 // @Description 対象ユーザー更新API
@@ -122,10 +126,11 @@ func GetUserByUID(c echo.Context) error {
 func UpdateUserByUID(c echo.Context) error {
 	// インスタンス生成
 	userRepository := repoUser.NewUserRepository()
-	userService := user.NewUserService(userRepository)
+	userService := serviceUser.NewUserService(userRepository)
+	userUsecase := usecaseUser.NewUpdateUserUsecase(userService)
 
-	// サービス実行
-	return userService.UpdateUserByUID(c)
+	// ユースケースの実行
+	return userUsecase.Exec(c)
 }
 
 // @Description 対象ユーザー削除API
@@ -139,8 +144,9 @@ func UpdateUserByUID(c echo.Context) error {
 func DeleteUserByUID(c echo.Context) error {
 	// インスタンス生成
 	userRepository := repoUser.NewUserRepository()
-	userService := user.NewUserService(userRepository)
+	userService := serviceUser.NewUserService(userRepository)
+	userUsecase := usecaseUser.NewDeleteUserUsecase(userService)
 
-	// サービス実行
-	return userService.DeleteUserByUID(c)
+	// ユースケースの実行
+	return userUsecase.Exec(c)
 }
