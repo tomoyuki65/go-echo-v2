@@ -2,7 +2,8 @@ package index
 
 import (
 	repoIndex "go-echo-v2/internal/repositories/index"
-	"go-echo-v2/internal/services/index"
+	serviceIndex "go-echo-v2/internal/services/index"
+	usecaseIndex "go-echo-v2/internal/usecases/index"
 
 	"github.com/labstack/echo/v4"
 )
@@ -14,8 +15,9 @@ import (
 func Index(c echo.Context) error {
 	// インスタンス生成
 	indexRepository := repoIndex.NewIndexRepository()
-	indexService := index.NewIndexService(indexRepository)
+	indexService := serviceIndex.NewIndexService(indexRepository)
+	indexUsecase := usecaseIndex.NewIndexUsecase(indexService)
 
-	// サービス実行
-	return indexService.Index(c)
+	// ユースケースの実行
+	return indexUsecase.Exec(c)
 }

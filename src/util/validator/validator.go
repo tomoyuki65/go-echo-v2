@@ -1,8 +1,8 @@
 package validator
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -38,7 +38,7 @@ func (cv *customValidator) Validate(i interface{}) error {
 			}
 		}
 
-		return fmt.Errorf(errMsg)
+		return fmt.Errorf("%s", errMsg)
 	}
 
 	return nil

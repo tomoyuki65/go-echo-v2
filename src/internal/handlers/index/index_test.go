@@ -9,7 +9,8 @@ import (
 	"testing"
 
 	mockRepoIndex "go-echo-v2/internal/repositories/index/mock_index"
-	"go-echo-v2/internal/services/index"
+	serviceIndex "go-echo-v2/internal/services/index"
+	usecaseIndex "go-echo-v2/internal/usecases/index"
 	"go-echo-v2/middleware"
 
 	"github.com/joho/godotenv"
@@ -41,10 +42,11 @@ func TestIndex(t *testing.T) {
 	defer ctrl.Finish()
 	mockIndexRepository := mockRepoIndex.NewMockIndexRepository(ctrl)
 	mockIndexRepository.EXPECT().Hello().Return("Hello World !!")
-	indexService := index.NewIndexService(mockIndexRepository)
+	indexService := serviceIndex.NewIndexService(mockIndexRepository)
+	indexUsecase := usecaseIndex.NewIndexUsecase(indexService)
 
 	// テスト実行
-	err := indexService.Index(c)
+	err := indexUsecase.Exec(c)
 
 	// 検証
 	assert.Equal(t, nil, err)

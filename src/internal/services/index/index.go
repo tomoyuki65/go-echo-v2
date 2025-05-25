@@ -1,16 +1,14 @@
 package index
 
 import (
-	"net/http"
+	"fmt"
 
 	"go-echo-v2/internal/repositories/index"
-
-	"github.com/labstack/echo/v4"
 )
 
 // インターフェース定義
 type IndexService interface {
-	Index(c echo.Context) error
+	Index() (string, error)
 }
 
 // 構造体定義
@@ -27,7 +25,11 @@ func NewIndexService(
 	}
 }
 
-func (s *indexService) Index(c echo.Context) error {
+func (s *indexService) Index() (string, error) {
 	text := s.indexRepository.Hello()
-	return c.String(http.StatusOK, text)
+	if text == "" {
+		return "", fmt.Errorf("textが空です。")
+	}
+
+	return text, nil
 }
