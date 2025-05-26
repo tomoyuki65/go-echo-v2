@@ -1,6 +1,7 @@
 package router
 
 import (
+	"go-echo-v2/internal/handlers/csv"
 	"go-echo-v2/internal/handlers/healthcheck"
 	"go-echo-v2/internal/handlers/index"
 	"go-echo-v2/internal/handlers/user"
@@ -20,4 +21,5 @@ func SetupRouter(e *echo.Echo) {
 	v1.GET("/user/:uid", user.GetUserByUID, middleware.AuthMiddleware)
 	v1.PUT("/user/:uid", user.UpdateUserByUID, middleware.AuthMiddleware)
 	v1.DELETE("/user/:uid", user.DeleteUserByUID, middleware.AuthMiddleware)
+	v1.POST("/csv/import", csv.ImportCsv, middleware.AuthMiddleware)
 }

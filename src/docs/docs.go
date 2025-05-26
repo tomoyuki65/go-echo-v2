@@ -28,6 +28,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/csv/import": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "CSVファイルのインポート用API",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "csv"
+                ],
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "CSV file to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/csv.ImportCsvResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/csv.BadRequestResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/csv.UnauthorizedResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/csv.UnprocessableEntityResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/csv.InternalServerErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/healthcheck": {
             "get": {
                 "security": [
@@ -124,7 +181,7 @@ const docTemplate = `{
                     "200": {
                         "description": "対象データが存在しない場合は空のオブジェクト「{}」を返す。",
                         "schema": {
-                            "$ref": "#/definitions/go-echo-v2_internal_handlers_user.UserResponse"
+                            "$ref": "#/definitions/user.UserResponse"
                         }
                     },
                     "401": {
@@ -173,7 +230,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/go-echo-v2_internal_handlers_user.UserResponse"
+                            "$ref": "#/definitions/user.UserResponse"
                         }
                     },
                     "400": {
@@ -260,7 +317,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/go-echo-v2_internal_handlers_user.UserResponse"
+                                "$ref": "#/definitions/user.UserResponse"
                             }
                         }
                     },
@@ -281,6 +338,63 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "csv.BadRequestResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Bad Request"
+                }
+            }
+        },
+        "csv.ImportCsvResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "t.tanaka@example.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "太郎"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "田中"
+                },
+                "no": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "csv.InternalServerErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Internal Server Error"
+                }
+            }
+        },
+        "csv.UnauthorizedResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unauthorized"
+                }
+            }
+        },
+        "csv.UnprocessableEntityResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Unprocessable Entity"
+                }
+            }
+        },
         "go-echo-v2_internal_handlers_healthcheck.OKResponse": {
             "type": "object",
             "properties": {
@@ -350,42 +464,6 @@ const docTemplate = `{
                 }
             }
         },
-        "go-echo-v2_internal_handlers_user.UserResponse": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string",
-                    "example": "2025-03-15 18:08:00"
-                },
-                "deleted_at": {
-                    "type": "string",
-                    "example": ""
-                },
-                "email": {
-                    "type": "string",
-                    "example": "t.yamada@example.com"
-                },
-                "first_name": {
-                    "type": "string",
-                    "example": "太郎"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "last_name": {
-                    "type": "string",
-                    "example": "山田"
-                },
-                "uid": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string",
-                    "example": "2025-03-15 18:08:00"
-                }
-            }
-        },
         "healthcheck.InternalServerErrorResponse": {
             "type": "object",
             "properties": {
@@ -437,6 +515,42 @@ const docTemplate = `{
                 "message": {
                     "type": "string",
                     "example": "バリデーションエラー: error message"
+                }
+            }
+        },
+        "user.UserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2025-03-15 18:08:00"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "example": ""
+                },
+                "email": {
+                    "type": "string",
+                    "example": "t.yamada@example.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "太郎"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "山田"
+                },
+                "uid": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2025-03-15 18:08:00"
                 }
             }
         }

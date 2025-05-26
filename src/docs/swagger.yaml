@@ -1,4 +1,43 @@
 definitions:
+  csv.BadRequestResponse:
+    properties:
+      message:
+        example: Bad Request
+        type: string
+    type: object
+  csv.ImportCsvResponse:
+    properties:
+      email:
+        example: t.tanaka@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      last_name:
+        example: 田中
+        type: string
+      "no":
+        example: "1"
+        type: string
+    type: object
+  csv.InternalServerErrorResponse:
+    properties:
+      message:
+        example: Internal Server Error
+        type: string
+    type: object
+  csv.UnauthorizedResponse:
+    properties:
+      message:
+        example: Unauthorized
+        type: string
+    type: object
+  csv.UnprocessableEntityResponse:
+    properties:
+      message:
+        example: Unprocessable Entity
+        type: string
+    type: object
   go-echo-v2_internal_handlers_healthcheck.OKResponse:
     properties:
       message:
@@ -48,32 +87,6 @@ definitions:
         example: 佐藤
         type: string
     type: object
-  go-echo-v2_internal_handlers_user.UserResponse:
-    properties:
-      created_at:
-        example: "2025-03-15 18:08:00"
-        type: string
-      deleted_at:
-        example: ""
-        type: string
-      email:
-        example: t.yamada@example.com
-        type: string
-      first_name:
-        example: 太郎
-        type: string
-      id:
-        example: 1
-        type: integer
-      last_name:
-        example: 山田
-        type: string
-      uid:
-        type: string
-      updated_at:
-        example: "2025-03-15 18:08:00"
-        type: string
-    type: object
   healthcheck.InternalServerErrorResponse:
     properties:
       message:
@@ -110,6 +123,32 @@ definitions:
         example: 'バリデーションエラー: error message'
         type: string
     type: object
+  user.UserResponse:
+    properties:
+      created_at:
+        example: "2025-03-15 18:08:00"
+        type: string
+      deleted_at:
+        example: ""
+        type: string
+      email:
+        example: t.yamada@example.com
+        type: string
+      first_name:
+        example: 太郎
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: 山田
+        type: string
+      uid:
+        type: string
+      updated_at:
+        example: "2025-03-15 18:08:00"
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -125,6 +164,42 @@ paths:
           description: OK
       tags:
       - index
+  /api/v1/csv/import:
+    post:
+      consumes:
+      - multipart/form-data
+      description: CSVファイルのインポート用API
+      parameters:
+      - description: CSV file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/csv.ImportCsvResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/csv.BadRequestResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/csv.UnauthorizedResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/csv.UnprocessableEntityResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/csv.InternalServerErrorResponse'
+      security:
+      - Bearer: []
+      tags:
+      - csv
   /api/v1/healthcheck:
     get:
       description: APIとDBの接続確認をするためのヘルスチェックAPI
@@ -208,7 +283,7 @@ paths:
         "200":
           description: 対象データが存在しない場合は空のオブジェクト「{}」を返す。
           schema:
-            $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+            $ref: '#/definitions/user.UserResponse'
         "401":
           description: Unauthorized
           schema:
@@ -239,7 +314,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+            $ref: '#/definitions/user.UserResponse'
         "400":
           description: Bad Request
           schema:
@@ -268,7 +343,7 @@ paths:
           description: 対象データが存在しない場合は空の配列「[]」を返す。
           schema:
             items:
-              $ref: '#/definitions/go-echo-v2_internal_handlers_user.UserResponse'
+              $ref: '#/definitions/user.UserResponse'
             type: array
         "401":
           description: Unauthorized
