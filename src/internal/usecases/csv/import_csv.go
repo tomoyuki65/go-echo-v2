@@ -53,7 +53,7 @@ func checkUTF8(fh *multipart.FileHeader) (bool, error) {
 }
 
 // メソッド定義
-func (s *csvUsecase) Exec(c echo.Context) error {
+func (u *csvUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
 	// CSVファイルを取得（CSVファイルにはヘッダー行が必要）

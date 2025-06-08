@@ -46,7 +46,7 @@ func NewCreateUserUsecases(
 }
 
 // ユーザー作成
-func (s *createUserUsecases) Exec(c echo.Context) error {
+func (u *createUserUsecases) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
 	var r CreateUserRequestBody
@@ -67,7 +67,7 @@ func (s *createUserUsecases) Exec(c echo.Context) error {
 	uid := uuid.New().String()
 
 	// ユーザー作成
-	user, err := s.userService.CreateUser(ctx, uid, r.LastName, r.FirstName, r.Email)
+	user, err := u.userService.CreateUser(ctx, uid, r.LastName, r.FirstName, r.Email)
 	if err != nil {
 		msg := fmt.Sprintf("ユーザーを作成できませんでした。: %v", err)
 		logger.Error(ctx, msg)

@@ -31,7 +31,7 @@ func NewDeleteUserUsecase(
 }
 
 // uidから対象ユーザーを論理削除
-func (s *deleteUserUsecase) Exec(c echo.Context) error {
+func (u *deleteUserUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
@@ -39,7 +39,7 @@ func (s *deleteUserUsecase) Exec(c echo.Context) error {
 
 	// TODO: 認可チェックを入れる
 
-	err := s.userService.DeleteUserByUID(ctx, uid)
+	err := u.userService.DeleteUserByUID(ctx, uid)
 	if err != nil {
 		msg := fmt.Sprintf("ユーザーを削除できませんでした。: %v", err)
 		logger.Error(ctx, msg)

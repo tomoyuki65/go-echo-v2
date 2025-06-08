@@ -41,10 +41,10 @@ func NewGetUsersUsecase(
 }
 
 // 有効な全てのユーザーを取得
-func (s *getUsersUsecase) Exec(c echo.Context) error {
+func (u *getUsersUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
-	users, err := s.userService.GetAllUsers(ctx)
+	users, err := u.userService.GetAllUsers(ctx)
 	if len(users) == 0 || err != nil {
 		// データが０件またはエラーの場合は空の配列を返す
 		res := []map[string]interface{}{}

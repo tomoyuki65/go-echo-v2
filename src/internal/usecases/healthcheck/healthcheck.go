@@ -36,10 +36,10 @@ func NewHealthcheckUsecase(
 }
 
 // Healthcheckメソッドの実装
-func (s *healthcheckUsecase) Exec(c echo.Context) error {
+func (u *healthcheckUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
-	err := s.healthcheckService.Healthcheck(ctx)
+	err := u.healthcheckService.Healthcheck(ctx)
 	if err != nil {
 		msg := fmt.Sprintf("Failed to health check: %v", err)
 		logger.Error(ctx, msg)

@@ -28,8 +28,8 @@ func NewIndexUsecase(
 	}
 }
 
-func (s *indexUsecase) Exec(c echo.Context) error {
-	text, err := s.indexService.Index()
+func (u *indexUsecase) Exec(c echo.Context) error {
+	text, err := u.indexService.Index()
 	if err != nil {
 		msg := fmt.Sprintf("Internal Server Error: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, msg)

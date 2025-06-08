@@ -49,7 +49,7 @@ func NewUpdateUserUsecase(
 }
 
 // uidから対象のユーザーを更新
-func (s *updateUserUsecase) Exec(c echo.Context) error {
+func (u *updateUserUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
@@ -77,7 +77,7 @@ func (s *updateUserUsecase) Exec(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, msg)
 	}
 
-	user, err := s.userService.UpdateUserByUID(
+	user, err := u.userService.UpdateUserByUID(
 		ctx,
 		uid,
 		r.LastName,

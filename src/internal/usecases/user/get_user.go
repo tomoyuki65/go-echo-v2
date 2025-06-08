@@ -41,7 +41,7 @@ func NewGetUserUsecase(
 }
 
 // uidから対象のユーザーを取得
-func (s *getUserUsecase) Exec(c echo.Context) error {
+func (u *getUserUsecase) Exec(c echo.Context) error {
 	ctx := utilContext.CreateContext(c)
 
 	// パスパラメータからuidを取得
@@ -49,7 +49,7 @@ func (s *getUserUsecase) Exec(c echo.Context) error {
 
 	// TODO: 認可チェックを入れる
 
-	user, err := s.userService.GetUserByUID(ctx, uid)
+	user, err := u.userService.GetUserByUID(ctx, uid)
 	if user == nil || err != nil {
 		// データが存在しない、またはエラーの場合は空のオブジェクトを返す
 		res := map[string]interface{}{}
